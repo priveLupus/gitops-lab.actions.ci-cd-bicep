@@ -19,12 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       configuration: release
-      
     steps:
     - name: Checkout Sources
-    - uses: actions/checkout@v3
+      uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v2.0.0
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
@@ -91,7 +90,43 @@ jobs:
           app-name: ${{ steps.deploywebappd.outputs.webappname }} 
           #app-name: ${{ env.AZURE-WEBAPP-NAME }}
           package: ${{ runner.temp }}/publish     
-     
+  
+  Prod-Job:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [ Dev-Job ]
+    env:
+      AZURE-WEBAPP-NAME: braunschwaiger-mywebapp-prod
+    steps:
+    - name: Download Templates
+      uses: actions/download-artifact@v3
+      with:
+        name: templates_artifact
+        path: ${{ runner.temp }}/templates
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Deploy BICEP template
+      uses: azure/arm-deploy@v1
+      id: deploywebapp
+      with:
+        deploymentName: create-webapp
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ env.AZURE_RG }}
+        template: ${{ runner.temp }}/templates/webapp.bicep
+        parameters: location=${{ ENV.AZURE-LOCATION }} appName=${{env.AZURE-WEBAPP-NAME}}
+    - name: Download Publish
+      uses: actions/download-artifact@v3
+      with:
+        name: publish_artifact
+        path: ${{ runner.temp }}/publish
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ${{ steps.deploywebapp.outputs.webappname }}
+        # app-name: ${{ env.AZURE-WEBAPP-NAME }}package: ${{ runner.temp }}/publish 
+  
  
      
      
