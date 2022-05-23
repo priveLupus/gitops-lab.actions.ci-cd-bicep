@@ -12,7 +12,7 @@ env:
   AZURE_RG: github-actions-staged
   AZURE_SUBSCRIPTION: <<REPLACE>>
   AZURE_LOCATION: eastUS
-  AZURE-WEBAPP-NAME: braunschwaiger-mywebapp-dev
+  AZURE_WEBAPP_NAME: braunschwaiger-mywebapp-dev
  
 jobs:
   Build-Job:
@@ -58,7 +58,7 @@ jobs:
       uses: Azure/cli@v1
       with:
         inlineScript:
-          az group create --name ${{ env.AZURE_RG }} --location ${{env.AZURE-LOCATION }}
+          az group create --name ${{ env.AZURE_RG }} --location ${{env.AZURE_LOCATION }}
   
   Dev-Job:
     runs-on: ubuntu-latest
@@ -78,7 +78,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ env.AZURE_RG }}
           template: ${{ runner.temp }}/templates/webapp.bicep
-          parameters: location=${{ ENV.AZURE-LOCATION }} appName=${{env.AZURE-WEBAPP-NAME}}
+          parameters: location=${{ ENV.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
       - name: Download Publish
         uses: actions/download-artifact@v3
         with:
@@ -88,7 +88,7 @@ jobs:
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.deploywebappd.outputs.webappname }} 
-          #app-name: ${{ env.AZURE-WEBAPP-NAME }}
+          #app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ runner.temp }}/publish     
   
   Prod-Job:
@@ -115,7 +115,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.AZURE_RG }}
         template: ${{ runner.temp }}/templates/webapp.bicep
-        parameters: location=${{ ENV.AZURE-LOCATION }} appName=${{env.AZURE-WEBAPP-NAME}}
+        parameters: location=${{ ENV.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
     - name: Download Publish
       uses: actions/download-artifact@v3
       with:
@@ -125,7 +125,7 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ steps.deploywebapp.outputs.webappname }}
-        # app-name: ${{ env.AZURE-WEBAPP-NAME }}package: ${{ runner.temp }}/publish 
+        # app-name: ${{ env.AZURE_WEBAPP_NAME }}package: ${{ runner.temp }}/publish 
   
  
      
