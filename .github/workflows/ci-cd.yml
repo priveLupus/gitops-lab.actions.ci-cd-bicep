@@ -78,7 +78,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ env.AZURE_RG }}
           template: ${{ runner.temp }}/templates/webapp.bicep
-          parameters: location=${{ ENV.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
+          parameters: location=${{ env.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
       - name: Download Publish
         uses: actions/download-artifact@v3
         with:
@@ -115,7 +115,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ env.AZURE_RG }}
         template: ${{ runner.temp }}/templates/webapp.bicep
-        parameters: location=${{ ENV.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
+        parameters: location=${{ env.AZURE_LOCATION }} appName=${{env.AZURE_WEBAPP_NAME}}
     - name: Download Publish
       uses: actions/download-artifact@v3
       with:
