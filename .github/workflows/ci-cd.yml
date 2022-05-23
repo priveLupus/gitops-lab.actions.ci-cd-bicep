@@ -10,7 +10,7 @@ on:
 
 env:
   AZURE_RG: github-actions-staged
-  AZURE_SUBSCRIPTION: <<REPLACE>>
+  AZURE_SUBSCRIPTION: e59debac-8280-4b9a-a1b8-292c67e51aaa
   AZURE_LOCATION: eastUS
   AZURE_WEBAPP_NAME: braunschwaiger-mywebapp-dev
  
